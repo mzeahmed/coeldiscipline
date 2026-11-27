@@ -59,6 +59,13 @@ export function sqliteGoalRepository(sql: SqlExecutor): GoalRepository {
       );
     },
 
+    async setTargetDays(id, targetDays, updatedAt) {
+      await sql.execute(
+        'UPDATE goal SET target_days = ?, updated_at = ? WHERE id = ?',
+        [targetDays, updatedAt, id],
+      );
+    },
+
     async setArchivedOn(id, archivedOn, updatedAt) {
       await sql.execute(
         'UPDATE goal SET archived_on = ?, updated_at = ? WHERE id = ?',

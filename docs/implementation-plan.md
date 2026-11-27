@@ -10,8 +10,8 @@ commit message, then waits for validation. Nothing is committed automatically.
 | 0 | Foundations: demo removal, `src/` skeleton, strict TypeScript, CI checks, debug/release separation, release signing, license, documentation | local checks and Android builds pass | Done |
 | 1 | Spike: OP-SQLite, React Navigation, time zone support of `Intl` on Hermes | a release build reads and writes on the phone, and converts an instant to a date in a chosen zone | Code ready, release build passes; on-device checks pending |
 | 2 | Domain: local dates, entries, derived attempts and streaks, validation, reconciliation, clock assessment and repair | domain tests pass | Done |
-| 3 | SQLite migrations and store | constraints, cascading deletion and rollback are tested | Done, awaiting validation |
-| 4 | Use cases with an injected clock | multi-day scenarios are tested end to end | |
+| 3 | SQLite migrations and store | constraints, cascading deletion and rollback are tested | Done |
+| 4 | Use cases with an injected clock | multi-day scenarios are tested end to end | Done, awaiting validation |
 | 5 | Translations (fr, en), goal creation, home screen with quick validation | data survives a restart, offline | |
 | 6 | Goal detail, editing, history, archiving, deletion, completed goals | full goal lifecycle works | |
 | 7 | Reconciliation on launch, resume and midnight; clock warnings and recovery; time zone setting | verified on the phone | |
@@ -19,9 +19,6 @@ commit message, then waits for validation. Nothing is committed automatically.
 | 9 | Documentation and acceptance of the MVP criteria | `v1.0.0` APK | |
 
 Time handling: [decisions/0002-time-handling.md](decisions/0002-time-handling.md).
-
-Goal creation and editing rules (title, start date, locked duration) are written
-with their use cases in step 4.
 
 ## Step 1 verification (on the phone)
 
@@ -52,8 +49,8 @@ and is removed in step 5.
 
 ## Open points
 
-- **Step 6.** A goal "has started" once its start date is today or earlier; its
-  duration is then locked. To be confirmed.
+- **Step 4.** A goal "has started" once its start date is today or earlier; its
+  duration is then locked. Implemented this way, to be confirmed.
 - **Step 5.** The language follows the phone (French, otherwise English), with no
   in-app selector. To be confirmed.
 - **Step 8.** React Native has no built-in file picker. The choice between a
