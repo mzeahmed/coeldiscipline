@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, useColorScheme } from 'react-native';
-import type { CheckResult } from '../../application/diagnostics';
+import type { CheckResult } from '../domain/checkResult';
 
 interface DiagnosticsScreenProps {
   readonly runChecks: () => Promise<CheckResult[]>;

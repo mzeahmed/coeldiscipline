@@ -12,7 +12,7 @@ Exemple : lire 10 pages chaque jour pendant 30 jours consécutifs. Si une journ�
 - Projet déjà initialisé avec `npx @react-native-community/cli@latest init`.
 - React Native CLI, TypeScript, sans Expo.
 - Android est la seule plateforme officiellement ciblée (le dossier `ios/` est conservé sans être maintenu).
-- Interface en français et en anglais dès la V1, traductions centralisées dans `src/presentation/i18n/`, sans dépendance superflue.
+- Interface en français et en anglais dès la V1, traductions centralisées dans `src/shared/i18n/`, sans dépendance superflue.
 - Licence MIT.
 - Code, commentaires, documentation technique et README en anglais.
 - Les versions debug et release s'installent côte à côte (`com.coeldiscipline.debug` et `com.coeldiscipline`).
@@ -162,30 +162,25 @@ Les choix de bibliothèques suivants sont des recommandations à vérifier selon
 
 Éviter d'installer toutes les dépendances dès le départ. Introduire chaque bibliothèque lorsqu'une fonctionnalité le justifie. SQLite reste la source de vérité ; Zustand ne doit pas devenir une seconde base de données.
 
-### Organisation indicative de `src/`
+### Organisation de `src/`
+
+Le code est organisé par module fonctionnel :
 
 ```text
 src/
-  app/                 # Composition, providers, navigation
-  domain/
-    goals/             # Entités, règles et calculs purs
-    attempts/
-    tracking/
-  application/         # Cas d'utilisation, ports/repositories
-  infrastructure/
-    database/          # SQLite, migrations, repositories
-    notifications/
-    backup/
-  presentation/
-    screens/
-    components/
-    hooks/
-    stores/
-    theme/
-  shared/              # Utilitaires réellement transversaux
+  App.tsx
+  navigation/          # Routes et assemblage des écrans
+  modules/
+    <Module>/          # Goals, Dashboard, Settings, Backup
+      domain/          # Entités, règles et calculs purs
+      application/     # Cas d'utilisation, ports
+      data/            # Repositories, fichiers, API de l'appareil
+      components/  screens/  hooks/
+      index.ts         # Seule porte d'entrée du module
+  shared/              # database, time, i18n, theme, ui
 ```
 
-Privilégier une architecture modulaire pragmatique, sans abstractions inutiles. Le domaine ne dépend ni de React Native, ni de SQLite, ni de Zustand. Injecter une horloge dans les règles temporelles pour faciliter les tests. Les écrans appellent les cas d'utilisation ; ils ne recalculent pas les règles métier.
+Privilégier une architecture modulaire pragmatique, sans abstractions inutiles. Le domaine ne dépend ni de React Native, ni de SQLite. Un module n'en importe un autre que par son `index.ts`, avec l'alias `@/`. Injecter une horloge dans les règles temporelles pour faciliter les tests. Les écrans appellent les cas d'utilisation ; ils ne recalculent pas les règles métier. Détails : [decisions/0001-architecture.md](decisions/0001-architecture.md).
 
 ## 8. Modèle de données conceptuel
 

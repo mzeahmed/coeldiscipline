@@ -1,5 +1,5 @@
-import type { CheckResult } from '../../application/diagnostics';
-import { dateInTimeZone, deviceTimeZone } from '../clock/dateInTimeZone';
+import type { CheckResult } from '../domain/checkResult';
+import { dateInTimeZone, deviceTimeZone } from '@/shared/time/dateInTimeZone';
 import { check } from './check';
 
 const CASES = [

@@ -1,5 +1,5 @@
 import { open, type DB } from '@op-engineering/op-sqlite';
-import type { CheckResult } from '../../application/diagnostics';
+import type { CheckResult } from '../domain/checkResult';
 import { check } from './check';
 
 async function countRows(db: DB): Promise<number> {

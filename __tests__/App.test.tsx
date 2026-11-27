@@ -1,6 +1,6 @@
 import ReactTestRenderer from 'react-test-renderer';
 import { Button } from 'react-native';
-import { App } from '../src/app/App';
+import { App } from '@/App';
 
 // The native provider renders nothing without device measurements.
 jest.mock(

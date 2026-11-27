@@ -1,4 +1,4 @@
-import type { CheckResult } from '../../application/diagnostics';
+import type { CheckResult } from '../domain/checkResult';
 
 /** Runs one verification, turning a thrown error into a failed result. */
 export async function check(

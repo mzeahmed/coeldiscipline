@@ -1,4 +1,4 @@
-import { dateInTimeZone } from '../../src/infrastructure/clock/dateInTimeZone';
+import { dateInTimeZone } from '@/shared/time/dateInTimeZone';
 
 test.each([
   ['2026-12-31T23:30:00Z', 'Pacific/Auckland', '2027-01-01'],

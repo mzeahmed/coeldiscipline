@@ -1,6 +1,6 @@
-import type { CheckResult } from '../application/diagnostics';
-import { runDatabaseChecks } from '../infrastructure/diagnostics/databaseChecks';
-import { runTimeZoneChecks } from '../infrastructure/diagnostics/timeZoneChecks';
+import { runDatabaseChecks } from '../data/databaseChecks';
+import { runTimeZoneChecks } from '../data/timeZoneChecks';
+import type { CheckResult } from '../domain/checkResult';
 
 /** Temporary (step 1 spike). Results are also written to `make logs`. */
 export async function runDiagnostics(): Promise<CheckResult[]> {

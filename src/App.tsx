@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RootNavigator } from './navigation';
+import { RootNavigator } from '@/navigation/RootNavigator';
 
 /** Application root. Screens and providers are composed here. */
 export function App() {
