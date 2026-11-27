@@ -24,10 +24,12 @@ export function assessClock(
   if (checkpoint === null) {
     return { kind: 'normal' };
   }
+
   const days = daysBetween(checkpoint, today);
   if (days < 0) {
     return { kind: 'movedBack', checkpoint };
   }
+
   return days >= LONG_GAP_DAYS && pendingMissedCount > 0
     ? { kind: 'longGap', days }
     : { kind: 'normal' };
@@ -50,6 +52,7 @@ export function repairAfterRollback(
   today: LocalDate,
 ): ClockRepair {
   const { archivedOn } = schedule;
+
   return {
     removedDates: entries
       .filter(

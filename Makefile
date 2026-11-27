@@ -8,7 +8,7 @@ NO_COLOR := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help check env start ensure-metro open-devtools dev install logs clean kill
+.PHONY: help check lint lintf format formatf env start ensure-metro open-devtools dev install logs clean kill
 
 # Sourced first by every recipe that needs Node, Java or adb
 ENV := source scripts/env.sh
@@ -40,7 +40,11 @@ help:
 	@printf "$(GREEN)📲 Installation sur le téléphone:$(NO_COLOR)\n"
 	@printf "  make install          → Build + installer l'APK autonome (sans désinstaller)\n\n"
 	@printf "$(GREEN)🔧 Utilitaires:$(NO_COLOR)\n"
-	@printf "  make check            → Types, lint et tests\\n"
+	@printf "  make check            → Format, types, lint et tests\\n"
+	@printf "  make lint             → Vérifier avec ESLint\\n"
+	@printf "  make lintf            → Corriger avec ESLint (--fix)\\n"
+	@printf "  make format           → Vérifier le formatage (sans modifier)\\n"
+	@printf "  make formatf          → Reformater (ESLint --fix puis Prettier)\\n"
 	@printf "  make start            → Lancer Metro (JS only)\n"
 	@printf "  make logs             → Logs Android React Native\n"
 	@printf "  make clean            → Clean Gradle + caches\n"
@@ -49,6 +53,27 @@ help:
 # 🔹 Same verifications as the CI
 check:
 	$(ENV) && npm run check
+
+lint:
+	@printf "$(YELLOW)Vérification avec ESLint...$(NO_COLOR)\n"
+	@$(ENV) && npm run lint
+	@printf "$(GREEN)Vérification ESLint terminée$(NO_COLOR)\n"
+
+lintf:
+	@printf "$(YELLOW)Correction avec ESLint...$(NO_COLOR)\n"
+	@$(ENV) && npm run lint:fix
+	@printf "$(GREEN)Correction ESLint terminée$(NO_COLOR)\n"
+
+# ESLint adds the blank lines, which Prettier only preserves
+formatf:
+	@printf "$(YELLOW)Reformatage...$(NO_COLOR)\n"
+	@$(ENV) && npm run lint:fix && npm run format
+	@printf "$(GREEN)Reformatage terminé$(NO_COLOR)\n"
+
+format:
+	@printf "$(YELLOW)Vérification du formatage...$(NO_COLOR)\n"
+	@$(ENV) && npm run format:check
+	@printf "$(GREEN)Vérification du formatage terminée$(NO_COLOR)\n"
 
 env:
 	@$(ENV) && echo "Environnement chargé"

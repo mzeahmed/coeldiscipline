@@ -38,7 +38,12 @@ const rejected = (reason: RejectionReason): Rejected => ({
  * @param displayedDate day shown to the user when they asked for validation.
  * @param today
  */
-export function validateDay(schedule: GoalSchedule, entries: readonly DailyEntry[], displayedDate: LocalDate, today: LocalDate): ValidationResult {
+export function validateDay(
+  schedule: GoalSchedule,
+  entries: readonly DailyEntry[],
+  displayedDate: LocalDate,
+  today: LocalDate,
+): ValidationResult {
   if (displayedDate !== today) {
     return rejected('dayChanged');
   }
@@ -75,11 +80,14 @@ export function undoValidation(
   if (displayedDate !== today) {
     return rejected('dayChanged');
   }
+
   if (schedule.archivedOn !== null) {
     return rejected('archived');
   }
+
   const validated = entries.some(
     entry => entry.date === today && entry.status === 'success',
   );
+
   return validated ? { kind: 'remove', date: today } : { kind: 'unchanged' };
 }

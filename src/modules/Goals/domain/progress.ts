@@ -40,6 +40,7 @@ export function deriveProgress(
     if (attempt) {
       attempts.push({ ...attempt, status });
     }
+
     return null;
   };
 
@@ -49,10 +50,12 @@ export function deriveProgress(
       open = close(open, 'failed');
       continue;
     }
+
     successCount += 1;
     if (open && addDays(open.lastSuccessDate, 1) !== date) {
       open = close(open, 'failed');
     }
+
     // Assertion: TypeScript wrongly narrows `open` to `null` in this loop.
     const previous = open as Attempt | null;
     open = {
@@ -67,6 +70,7 @@ export function deriveProgress(
       break;
     }
   }
+
   close(open, schedule.archivedOn ? 'abandoned' : 'active');
 
   const last = attempts.at(-1);

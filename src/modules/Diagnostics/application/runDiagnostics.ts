@@ -11,5 +11,6 @@ export async function runDiagnostics(): Promise<CheckResult[]> {
   for (const { name, passed, detail } of results) {
     console.log(`[diagnostics] ${passed ? 'PASS' : 'FAIL'} ${name}: ${detail}`);
   }
+
   return results;
 }
