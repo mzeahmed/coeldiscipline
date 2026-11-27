@@ -1,7 +1,7 @@
 # 0001. Application architecture
 
 Status: accepted. Revised: the code is organised by feature module instead of by
-global layer.
+global layer, and modules have no `index.ts` barrel.
 
 ## Layout
 
@@ -15,11 +15,11 @@ src/
       application/ use cases and ports
       data/        SQLite repositories, files, device APIs
       components/  screens/  hooks/
-      index.ts     public entry point
   shared/          used by several modules: database, time, i18n, theme, ui
 ```
 
-Folders are created when their first file is written. `__tests__/` mirrors `src/`.
+Folders are created when their first file is written. `__tests__/` mirrors `src/`;
+helpers used by tests live in `test-support/`.
 
 Planned modules: `Goals` (goals, daily entries, streaks, reconciliation),
 `Dashboard`, `Settings`, `Backup`. Goals and tracking stay together: they share
@@ -29,20 +29,35 @@ rules and transactions. `Diagnostics` is temporary.
 
 - Inside a module, dependencies point towards `domain`, which imports nothing from
   React Native, SQLite or third-party UI libraries.
-- Another module is imported only through its `index.ts` (`@/modules/Goals`).
-  Inside a module, use relative imports.
+- Imports are direct, to the file that declares the symbol: there is no
+  `index.ts` barrel.
+- Inside a module, use relative imports. Across modules, use the alias
+  (`@/modules/Goals/domain/goal`).
 - Modules do not depend on each other in cycles. `shared` depends on no module.
 - Domain functions are pure: they take a state and a date and return changes.
 - Use cases apply those changes in a single transaction.
 - Screens call use cases; they never compute business rules.
 - No dependency injection library; plain functions where a class adds nothing.
 
-ESLint enforces the entry point rule for `@/` imports, the independence of
-`shared` and of `domain`. It does not detect relative paths into another module,
-nor cycles.
+ESLint forbids a module to import itself through the alias, and checks the
+independence of `shared` and of `domain`. It does not detect relative paths into
+another module, nor cycles between modules.
+
+Without barrels, nothing hides a module's internal files: using only what another
+module means to expose relies on review.
+
+## Persistence
+
+- `shared/database` defines the minimal `SqlDatabase` interface (transactions
+  only), its OP-SQLite implementation and the migration runner.
+- Repositories are written against that interface, so they are tested with real
+  SQL on `node:sqlite`.
+- The schema version is `PRAGMA user_version`. A published migration is never
+  edited. A database from a newer application is refused.
+- Every access goes through a transaction, which runs one at a time.
 
 ## Dependencies
 
 Libraries are added when a feature needs them. V1 uses React Navigation and
 OP-SQLite. Zustand, date-fns and charting libraries are postponed. Expo is not
-used. SQL is tested on Node with `node:sqlite` (still experimental in Node 22).
+used. `node:sqlite` is still experimental in Node 22.
