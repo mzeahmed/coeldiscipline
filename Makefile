@@ -8,7 +8,7 @@ NO_COLOR := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help env start ensure-metro open-devtools dev install logs clean kill commit
+.PHONY: help env start ensure-metro open-devtools dev install logs clean kill
 
 # Sourced first by every recipe that needs Node, Java or adb
 ENV := source scripts/env.sh
@@ -43,8 +43,7 @@ help:
 	@printf "  make start            → Lancer Metro (JS only)\n"
 	@printf "  make logs             → Logs Android React Native\n"
 	@printf "  make clean            → Clean Gradle + caches\n"
-	@printf "  make kill             → Kill Metro + restart ADB\n"
-	@printf "  make commit m=\"...\" b=main → Commit (+ push si remote origin)\n\n"
+	@printf "  make kill             → Kill Metro + restart ADB\n\n"
 
 env:
 	@$(ENV) && echo "Environnement chargé"

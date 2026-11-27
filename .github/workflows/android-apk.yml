@@ -1,0 +1,48 @@
+name: Android APK
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      - run: npm ci
+
+      # Signed with the committed debug key, like `make install`, so the APK
+      # updates the installed app without losing its data.
+      # arm64 only: enough for a phone, faster build and smaller APK.
+      - name: Build APK
+        working-directory: android
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: coeldiscipline-${{ github.ref_name }}
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
