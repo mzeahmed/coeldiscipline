@@ -1,11 +1,7 @@
-import {
-  assessClock,
-  deriveProgress,
-  reconcile,
-  repairAfterRollback,
-  type DailyEntry,
-  type GoalSchedule,
-} from '@/modules/Goals';
+import { assessClock, repairAfterRollback } from '@/modules/Goals/domain/clock';
+import { reconcile } from '@/modules/Goals/domain/days';
+import type { DailyEntry, GoalSchedule } from '@/modules/Goals/domain/goal';
+import { deriveProgress } from '@/modules/Goals/domain/progress';
 import {
   addDays,
   parseLocalDate,

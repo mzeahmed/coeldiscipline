@@ -1,12 +1,7 @@
-import {
-  dayState,
-  deriveProgress,
-  reconcile,
-  undoValidation,
-  validateDay,
-  type DailyEntry,
-  type GoalSchedule,
-} from '@/modules/Goals';
+import { dayState, reconcile } from '@/modules/Goals/domain/days';
+import type { DailyEntry, GoalSchedule } from '@/modules/Goals/domain/goal';
+import { deriveProgress } from '@/modules/Goals/domain/progress';
+import { undoValidation, validateDay } from '@/modules/Goals/domain/validation';
 import { dateInTimeZone } from '@/shared/time/dateInTimeZone';
 import {
   addDays,

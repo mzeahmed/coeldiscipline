@@ -2,8 +2,9 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { HomeScreen } from '@/modules/Dashboard';
-import { DiagnosticsScreen, runDiagnostics } from '@/modules/Diagnostics';
+import { HomeScreen } from '@/modules/Dashboard/screens/HomeScreen';
+import { runDiagnostics } from '@/modules/Diagnostics/application/runDiagnostics';
+import { DiagnosticsScreen } from '@/modules/Diagnostics/screens/DiagnosticsScreen';
 
 type RootStackParamList = {
   Home: undefined;
