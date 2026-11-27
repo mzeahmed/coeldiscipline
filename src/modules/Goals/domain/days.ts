@@ -1,10 +1,6 @@
 import { addDays, type LocalDate } from '@/shared/time/localDate';
-import {
-  DailyEntry,
-  deriveProgress,
-  GoalSchedule,
-  sortByDate,
-} from '@/modules/Goals';
+import type { DailyEntry, GoalSchedule } from './goal';
+import { deriveProgress, sortByDate } from './progress';
 
 export type DayState =
   | 'success'
