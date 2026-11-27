@@ -9,6 +9,33 @@ export interface GoalSchedule {
   readonly archivedOn: LocalDate | null;
 }
 
+export const GOAL_CATEGORIES = [
+  'health',
+  'learning',
+  'spirituality',
+  'work',
+  'finance',
+  'other',
+] as const;
+
+export type GoalCategory = (typeof GOAL_CATEGORIES)[number];
+
+/** What the user can edit at any time. */
+export interface GoalDetails {
+  readonly title: string;
+  readonly description: string;
+  readonly motivation: string;
+  readonly category: GoalCategory;
+}
+
+export interface Goal extends GoalDetails, GoalSchedule {
+  readonly id: number;
+  /** Epoch milliseconds. */
+  readonly createdAt: number;
+  /** Epoch milliseconds. */
+  readonly updatedAt: number;
+}
+
 /**
  * Outcome of a closed or validated day. A pending day has no entry.
  * A goal has at most one entry per date.

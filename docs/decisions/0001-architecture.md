@@ -19,7 +19,8 @@ src/
   shared/          used by several modules: database, time, i18n, theme, ui
 ```
 
-Folders are created when their first file is written. `__tests__/` mirrors `src/`.
+Folders are created when their first file is written. `__tests__/` mirrors `src/`;
+helpers used by tests live in `test-support/`.
 
 Planned modules: `Goals` (goals, daily entries, streaks, reconciliation),
 `Dashboard`, `Settings`, `Backup`. Goals and tracking stay together: they share
@@ -41,8 +42,18 @@ ESLint enforces the entry point rule for `@/` imports, the independence of
 `shared` and of `domain`. It does not detect relative paths into another module,
 nor cycles.
 
+## Persistence
+
+- `shared/database` defines the minimal `SqlDatabase` interface (transactions
+  only), its OP-SQLite implementation and the migration runner.
+- Repositories are written against that interface, so they are tested with real
+  SQL on `node:sqlite`.
+- The schema version is `PRAGMA user_version`. A published migration is never
+  edited. A database from a newer application is refused.
+- Every access goes through a transaction, which runs one at a time.
+
 ## Dependencies
 
 Libraries are added when a feature needs them. V1 uses React Navigation and
 OP-SQLite. Zustand, date-fns and charting libraries are postponed. Expo is not
-used. SQL is tested on Node with `node:sqlite` (still experimental in Node 22).
+used. `node:sqlite` is still experimental in Node 22.
