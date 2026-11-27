@@ -1,5 +1,5 @@
 import ReactTestRenderer from 'react-test-renderer';
-import { Text } from 'react-native';
+import { Button } from 'react-native';
 import { App } from '../src/app/App';
 
 // The native provider renders nothing without device measurements.
@@ -7,12 +7,15 @@ jest.mock(
   'react-native-safe-area-context',
   () => require('react-native-safe-area-context/jest/mock').default,
 );
+// Native module, unavailable under Node.
+jest.mock('@op-engineering/op-sqlite', () => ({ open: jest.fn() }));
 
-test('renders the application name', async () => {
+test('starts on the home screen', async () => {
   let renderer: ReactTestRenderer.ReactTestRenderer | undefined;
   await ReactTestRenderer.act(() => {
     renderer = ReactTestRenderer.create(<App />);
   });
 
-  expect(renderer?.root.findByType(Text).props.children).toBe('CoelDiscipline');
+  expect(renderer?.root.findByType(Button).props.title).toBe('Diagnostics');
+  await ReactTestRenderer.act(() => renderer?.unmount());
 });

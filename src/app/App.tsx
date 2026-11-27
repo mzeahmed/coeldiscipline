@@ -1,5 +1,11 @@
-import { StatusBar, StyleSheet, Text, useColorScheme } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
+import { StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { RootNavigator } from './navigation';
 
 /** Application root. Screens and providers are composed here. */
 export function App() {
@@ -8,17 +14,9 @@ export function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <SafeAreaView style={styles.container}>
-        <Text style={[styles.title, isDarkMode && styles.titleDark]}>
-          CoelDiscipline
-        </Text>
-      </SafeAreaView>
+      <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
+        <RootNavigator />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  title: { fontSize: 24, fontWeight: '600', color: '#111111' },
-  titleDark: { color: '#f5f5f5' },
-});
