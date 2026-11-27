@@ -18,6 +18,7 @@ export function dateInTimeZone(instant: Date, timeZone: string): LocalDate {
     if (!part) {
       throw new Error(`Missing ${type} in formatted date`);
     }
+
     return part.value;
   };
 

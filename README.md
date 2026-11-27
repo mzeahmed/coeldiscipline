@@ -21,7 +21,8 @@ TypeScript, local-first: no account, no server, works offline.
 npm ci
 make dev       # debug app, installed next to the release one (Metro on port 8082)
 make install   # standalone release app, requires a signing key
-make check     # type checking, ESLint and tests
+make check     # formatting, type checking, ESLint and tests
+make formatf   # fix lint issues and reformat
 make help      # all commands
 ```
 

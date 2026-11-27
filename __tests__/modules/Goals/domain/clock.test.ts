@@ -26,6 +26,7 @@ const success = (n: number): DailyEntry => ({
 
 function repair(entries: DailyEntry[], today: LocalDate): DailyEntry[] {
   const { removedDates } = repairAfterRollback(goal, entries, today);
+
   return entries.filter(entry => !removedDates.includes(entry.date));
 }
 
