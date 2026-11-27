@@ -1,6 +1,6 @@
 // See docs/decisions/0002-time-handling.md.
 import { daysBetween, type LocalDate } from '@/shared/time/localDate';
-import type { DailyEntry, GoalSchedule } from './goal';
+import { DailyEntry, GoalSchedule } from '@/modules/Goals';
 
 /** Days of absence from which marking missed days needs a confirmation. */
 export const LONG_GAP_DAYS = 3;

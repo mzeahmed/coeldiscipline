@@ -1,5 +1,5 @@
 import { addDays, type LocalDate } from '@/shared/time/localDate';
-import type { DailyEntry, GoalSchedule } from './goal';
+import { DailyEntry, GoalSchedule } from '@/modules/Goals';
 
 export type AttemptStatus = 'active' | 'failed' | 'completed' | 'abandoned';
 

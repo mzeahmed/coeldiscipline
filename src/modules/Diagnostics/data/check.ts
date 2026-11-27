@@ -1,10 +1,7 @@
 import type { CheckResult } from '../domain/checkResult';
 
 /** Runs one verification, turning a thrown error into a failed result. */
-export async function check(
-  name: string,
-  verify: () => Promise<{ passed: boolean; detail: string }>,
-): Promise<CheckResult> {
+export async function check(name: string, verify: () => Promise<{ passed: boolean; detail: string }>): Promise<CheckResult> {
   try {
     return { name, ...(await verify()) };
   } catch (error) {
