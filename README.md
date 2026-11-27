@@ -34,7 +34,7 @@ with GitHub Actions.
 - [Requirements](docs/CoelDiscipline.md) (French)
 - [Implementation plan](docs/implementation-plan.md)
 - [Architecture](docs/decisions/0001-architecture.md)
-- [Time handling](docs/decisions/0002-time-handling.md) (proposed)
+- [Time handling](docs/decisions/0002-time-handling.md)
 
 ## License
 
