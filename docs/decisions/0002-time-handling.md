@@ -1,7 +1,7 @@
 # 0002. Time handling and clock anomalies
 
-Status: accepted. Domain rules implemented in `src/modules/Goals/domain/`;
-storage and user interface to come.
+Status: accepted. Implemented in `src/modules/Goals/` (rules, storage and use
+cases); the user interface is to come.
 
 ## Goals
 
@@ -35,7 +35,7 @@ archive date; there is no stored status.
 ## Checkpoint and detection
 
 The application stores the date of the last accepted reconciliation.
-On launch, resume and before any write:
+On launch, resume and before any write, including editing and deleting:
 
 | Situation | Condition | Behaviour |
 |---|---|---|

@@ -14,6 +14,11 @@ export interface GoalRepository {
     details: GoalDetails,
     updatedAt: number,
   ): Promise<void>;
+  setTargetDays(
+    id: number,
+    targetDays: number | null,
+    updatedAt: number,
+  ): Promise<void>;
   setArchivedOn(
     id: number,
     archivedOn: LocalDate | null,
