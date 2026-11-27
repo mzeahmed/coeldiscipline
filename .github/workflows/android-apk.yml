@@ -13,7 +13,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+
   build:
+    needs: check
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -33,11 +37,25 @@ jobs:
 
       - run: npm ci
 
-      # Signed with the committed debug key, like `make install`, so the APK
-      # updates the installed app without losing its data.
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::Secret ANDROID_KEYSTORE_BASE64 is not set (see docs/release-signing.md)"
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+
+      # Same key as `make install`, so the APK updates the installed app.
       # arm64 only: enough for a phone, faster build and smaller APK.
       - name: Build APK
         working-directory: android
+        env:
+          ORG_GRADLE_PROJECT_COELDISCIPLINE_STORE_FILE: ${{ runner.temp }}/release.keystore
+          ORG_GRADLE_PROJECT_COELDISCIPLINE_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_COELDISCIPLINE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_COELDISCIPLINE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
 
       - uses: actions/upload-artifact@v5

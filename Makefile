@@ -8,7 +8,7 @@ NO_COLOR := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help env start ensure-metro open-devtools dev install logs clean kill
+.PHONY: help check env start ensure-metro open-devtools dev install logs clean kill
 
 # Sourced first by every recipe that needs Node, Java or adb
 ENV := source scripts/env.sh
@@ -40,10 +40,15 @@ help:
 	@printf "$(GREEN)📲 Installation sur le téléphone:$(NO_COLOR)\n"
 	@printf "  make install          → Build + installer l'APK autonome (sans désinstaller)\n\n"
 	@printf "$(GREEN)🔧 Utilitaires:$(NO_COLOR)\n"
+	@printf "  make check            → Types, lint et tests\\n"
 	@printf "  make start            → Lancer Metro (JS only)\n"
 	@printf "  make logs             → Logs Android React Native\n"
 	@printf "  make clean            → Clean Gradle + caches\n"
 	@printf "  make kill             → Kill Metro + restart ADB\n\n"
+
+# 🔹 Same verifications as the CI
+check:
+	$(ENV) && npm run check
 
 env:
 	@$(ENV) && echo "Environnement chargé"
@@ -97,11 +102,11 @@ open-devtools:
 # 🔹 Full DEV: build + install + launch + open React Native DevTools
 dev: clean ensure-metro
 	@printf "$(YELLOW)Lancement de l'application Android de développement...$(NO_COLOR)\n"
-	$(ENV) && npx react-native run-android --no-packager --port $(METRO_PORT)
+	$(ENV) && npx react-native run-android --no-packager --port $(METRO_PORT) --appIdSuffix debug
 	@$(MAKE) open-devtools
 	@printf "$(GREEN)Application Android de développement lancée$(NO_COLOR)\n"
 
-# Release APK (embedded JS, signed with the debug key) installed on the
+# Release APK (embedded JS, signed with the personal key) installed on the
 # connected phone, app data preserved. Runs without the computer or Metro.
 install:
 	@printf "$(YELLOW)Construction et installation de l'APK...$(NO_COLOR)\n"

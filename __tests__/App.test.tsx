@@ -1,13 +1,18 @@
-/**
- * @format
- */
-
-import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
-import App from '../App';
+import { Text } from 'react-native';
+import { App } from '../src/app/App';
 
-test('renders correctly', async () => {
+// The native provider renders nothing without device measurements.
+jest.mock(
+  'react-native-safe-area-context',
+  () => require('react-native-safe-area-context/jest/mock').default,
+);
+
+test('renders the application name', async () => {
+  let renderer: ReactTestRenderer.ReactTestRenderer | undefined;
   await ReactTestRenderer.act(() => {
-    ReactTestRenderer.create(<App />);
+    renderer = ReactTestRenderer.create(<App />);
   });
+
+  expect(renderer?.root.findByType(Text).props.children).toBe('CoelDiscipline');
 });
