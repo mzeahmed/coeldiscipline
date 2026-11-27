@@ -81,7 +81,7 @@ L'application est un outil personnel de discipline, pas un système anti-triche 
 - en cas d'anomalie, aucune réconciliation destructrice n'a lieu sans confirmation ;
 - une erreur d'horloge ne provoque ni échec irréversible ni blocage durable.
 
-La solution détaillée et ses limites sont décrites dans [decisions/0002-time-handling.md](decisions/0002-time-handling.md) (proposition à valider avant implémentation).
+La solution détaillée et ses limites sont décrites dans [decisions/0002-time-handling.md](decisions/0002-time-handling.md) (décision validée).
 
 ### Modes futurs
 
@@ -184,14 +184,15 @@ Privilégier une architecture modulaire pragmatique, sans abstractions inutiles.
 
 ## 8. Modèle de données conceptuel
 
-- `Goal` : id, title, description, motivation, category, type, targetDuration, frequency, targetValue, unit, startDate, deadline, failureMode, status, createdAt, updatedAt.
-- `Attempt` (stockage à confirmer, voir la décision 0002) : id, goalId, startedAt, endedAt, status (active, failed, completed), streak (calculé ou cache dérivé).
-- `DailyEntry` : id, goalId, attemptId, date, status, value, validatedAt.
-- `FailureLog` : id, dailyEntryId, reason, notes, createdAt.
+- `Goal` : id, title, description, motivation, category, targetDays (vide = illimité), startDate, archivedOn, createdAt, updatedAt.
+- `DailyEntry` : id, goalId, date, status (success, missed), validatedAt.
+- `FailureLog` (V2) : id, dailyEntryId, reason, notes, createdAt.
 
-Relations : Goal 1:N Attempt ; Goal 1:N DailyEntry ; Attempt 1:N DailyEntry ; DailyEntry 0:1 FailureLog. Une entrée manquée peut exister sans tentative active, notamment après plusieurs jours d'inactivité. `attemptId` peut donc être nullable.
+Relations : Goal 1:N DailyEntry ; DailyEntry 0:1 FailureLog.
 
-Contraintes : unicité `(goalId, date)`, clés étrangères, au plus une tentative active par objectif, opérations atomiques pour validation et changement de tentative, migrations versionnées. Les compteurs dérivés doivent pouvoir être reconstruits à partir des entrées. Conserver les règles historiques nécessaires à leur interprétation (snapshot ou version des règles si elles deviennent modifiables).
+Les tentatives, séries, records et la réussite d'un objectif ne sont pas stockés : ils sont calculés depuis les journées (voir [decisions/0002-time-handling.md](decisions/0002-time-handling.md)). Les autres champs (type, fréquence, valeur cible, unité, heure limite, mode d'échec) seront ajoutés par migration avec leurs règles.
+
+Contraintes : unicité `(goalId, date)`, clés étrangères, suppression en cascade, opérations atomiques, migrations versionnées.
 
 ## 9. Roadmap
 
