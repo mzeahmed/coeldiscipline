@@ -72,6 +72,18 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+/**
+ * Release signing values come from Gradle properties, never from the repository:
+ * ~/.gradle/gradle.properties locally, ORG_GRADLE_PROJECT_* variables in CI.
+ */
+def releaseSigningKeys = [
+    "COELDISCIPLINE_STORE_FILE",
+    "COELDISCIPLINE_STORE_PASSWORD",
+    "COELDISCIPLINE_KEY_ALIAS",
+    "COELDISCIPLINE_KEY_PASSWORD",
+]
+def missingSigningKeys = releaseSigningKeys.findAll { !project.findProperty(it) }
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -83,27 +95,41 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
     signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+        release {
+            if (missingSigningKeys.isEmpty()) {
+                storeFile file(project.property("COELDISCIPLINE_STORE_FILE"))
+                storePassword project.property("COELDISCIPLINE_STORE_PASSWORD")
+                keyAlias project.property("COELDISCIPLINE_KEY_ALIAS")
+                keyPassword project.property("COELDISCIPLINE_KEY_PASSWORD")
+            }
         }
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
+            // Installed next to the release app, with its own data.
+            // Signed with the local Android SDK debug key.
+            applicationIdSuffix ".debug"
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
+    }
+}
+
+// Fail early with an explicit message instead of producing an unusable APK.
+gradle.taskGraph.whenReady { graph ->
+    def packagesRelease = graph.allTasks.any {
+        it.project == project && it.name in ["packageRelease", "packageReleaseBundle"]
+    }
+    if (packagesRelease && !missingSigningKeys.isEmpty()) {
+        throw new GradleException(
+            "Missing release signing properties: ${missingSigningKeys.join(', ')}. " +
+            "See docs/release-signing.md.")
     }
 }
 
