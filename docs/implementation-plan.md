@@ -7,8 +7,8 @@ commit message, then waits for validation. Nothing is committed automatically.
 
 | # | Step | Done when | Status |
 |---|---|---|---|
-| 0 | Foundations: demo removal, `src/app`, strict TypeScript, CI checks, debug/release separation, release signing, license, documentation | local checks and Android builds pass | Done, awaiting validation |
-| 1 | Spike: OP-SQLite, React Navigation, time zone support of `Intl` on Hermes | a release build reads and writes on the phone, and converts an instant to a date in a chosen zone | |
+| 0 | Foundations: demo removal, `src/` skeleton, strict TypeScript, CI checks, debug/release separation, release signing, license, documentation | local checks and Android builds pass | Done |
+| 1 | Spike: OP-SQLite, React Navigation, time zone support of `Intl` on Hermes | a release build reads and writes on the phone, and converts an instant to a date in a chosen zone | Code ready, release build passes; on-device checks pending |
 | 2 | Domain: local dates, entries, derived attempts and streaks, validation, reconciliation, clock assessment and repair | domain tests pass | |
 | 3 | SQLite migrations and store | constraints, cascading deletion and rollback are tested | |
 | 4 | Use cases with an injected clock | multi-day scenarios are tested end to end | |
@@ -20,6 +20,20 @@ commit message, then waits for validation. Nothing is committed automatically.
 
 Steps 2 to 4 depend on the validation of
 [decisions/0002-time-handling.md](decisions/0002-time-handling.md).
+
+## Step 1 verification (on the phone)
+
+Run `make install` (or `make dev`), open **Diagnostics**, and check that:
+
+- every line reads `PASS`;
+- the number of stored runs increases after closing and reopening the app;
+- the back button returns to the home screen.
+
+A failing "Time zone list" line is not blocking: it means the time zone setting
+needs its own list of zones.
+
+The diagnostics code (`diagnostics` folders and files, `spike.db`) is temporary
+and is removed in step 5.
 
 ## Test coverage by step
 
