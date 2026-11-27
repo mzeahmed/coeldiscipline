@@ -1,11 +1,8 @@
 /** @jest-environment node */
-import {
-  GOAL_CATEGORIES,
-  GOAL_MIGRATIONS,
-  sqliteGoalStore,
-  type GoalStore,
-  type NewGoal,
-} from '@/modules/Goals';
+import type { GoalStore, NewGoal } from '@/modules/Goals/application/ports';
+import { GOAL_MIGRATIONS } from '@/modules/Goals/data/migrations';
+import { sqliteGoalStore } from '@/modules/Goals/data/sqliteGoalStore';
+import { GOAL_CATEGORIES } from '@/modules/Goals/domain/goal';
 import { migrate } from '@/shared/database/migrate';
 import type { SqlDatabase, SqlValue } from '@/shared/database/sqlDatabase';
 import { parseLocalDate } from '@/shared/time/localDate';

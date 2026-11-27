@@ -176,11 +176,10 @@ src/
       application/     # Cas d'utilisation, ports
       data/            # Repositories, fichiers, API de l'appareil
       components/  screens/  hooks/
-      index.ts         # Seule porte d'entrée du module
   shared/              # database, time, i18n, theme, ui
 ```
 
-Privilégier une architecture modulaire pragmatique, sans abstractions inutiles. Le domaine ne dépend ni de React Native, ni de SQLite. Un module n'en importe un autre que par son `index.ts`, avec l'alias `@/`. Injecter une horloge dans les règles temporelles pour faciliter les tests. Les écrans appellent les cas d'utilisation ; ils ne recalculent pas les règles métier. Détails : [decisions/0001-architecture.md](decisions/0001-architecture.md).
+Privilégier une architecture modulaire pragmatique, sans abstractions inutiles. Le domaine ne dépend ni de React Native, ni de SQLite. Les imports sont directs, sans `index.ts` : relatifs à l'intérieur d'un module, avec l'alias `@/` entre modules. Injecter une horloge dans les règles temporelles pour faciliter les tests. Les écrans appellent les cas d'utilisation ; ils ne recalculent pas les règles métier. Détails : [decisions/0001-architecture.md](decisions/0001-architecture.md).
 
 ## 8. Modèle de données conceptuel
 

@@ -1,7 +1,7 @@
 # 0001. Application architecture
 
 Status: accepted. Revised: the code is organised by feature module instead of by
-global layer.
+global layer, and modules have no `index.ts` barrel.
 
 ## Layout
 
@@ -15,7 +15,6 @@ src/
       application/ use cases and ports
       data/        SQLite repositories, files, device APIs
       components/  screens/  hooks/
-      index.ts     public entry point
   shared/          used by several modules: database, time, i18n, theme, ui
 ```
 
@@ -30,17 +29,22 @@ rules and transactions. `Diagnostics` is temporary.
 
 - Inside a module, dependencies point towards `domain`, which imports nothing from
   React Native, SQLite or third-party UI libraries.
-- Another module is imported only through its `index.ts` (`@/modules/Goals`).
-  Inside a module, use relative imports.
+- Imports are direct, to the file that declares the symbol: there is no
+  `index.ts` barrel.
+- Inside a module, use relative imports. Across modules, use the alias
+  (`@/modules/Goals/domain/goal`).
 - Modules do not depend on each other in cycles. `shared` depends on no module.
 - Domain functions are pure: they take a state and a date and return changes.
 - Use cases apply those changes in a single transaction.
 - Screens call use cases; they never compute business rules.
 - No dependency injection library; plain functions where a class adds nothing.
 
-ESLint enforces the entry point rule for `@/` imports, the independence of
-`shared` and of `domain`. It does not detect relative paths into another module,
-nor cycles.
+ESLint forbids a module to import itself through the alias, and checks the
+independence of `shared` and of `domain`. It does not detect relative paths into
+another module, nor cycles between modules.
+
+Without barrels, nothing hides a module's internal files: using only what another
+module means to expose relies on review.
 
 ## Persistence
 

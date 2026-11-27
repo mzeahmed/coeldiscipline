@@ -1,6 +1,6 @@
 import type { LocalDate } from '@/shared/time/localDate';
 import type { DailyEntry, GoalSchedule } from './goal';
-import { deriveProgress } from '@/modules/Goals';
+import { deriveProgress } from './progress';
 
 export type RejectionReason =
   | 'dayChanged'
