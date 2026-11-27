@@ -1,9 +1,11 @@
+import { parseLocalDate, type LocalDate } from './localDate';
+
 /**
- * Calendar date (`YYYY-MM-DD`) of an instant in an IANA time zone.
+ * Calendar date of an instant in an IANA time zone.
  *
  * @throws RangeError if the time zone is unknown.
  */
-export function dateInTimeZone(instant: Date, timeZone: string): string {
+export function dateInTimeZone(instant: Date, timeZone: string): LocalDate {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone,
     year: 'numeric',
@@ -19,7 +21,7 @@ export function dateInTimeZone(instant: Date, timeZone: string): string {
     return part.value;
   };
 
-  return `${read('year')}-${read('month')}-${read('day')}`;
+  return parseLocalDate(`${read('year')}-${read('month')}-${read('day')}`);
 }
 
 /** IANA time zone currently configured on the device. */

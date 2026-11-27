@@ -1,6 +1,7 @@
 # 0002. Time handling and clock anomalies
 
-Status: **proposed**, not implemented.
+Status: accepted. Domain rules implemented in `src/modules/Goals/domain/`;
+storage and user interface to come.
 
 ## Goals
 
@@ -28,12 +29,12 @@ and goal completion are computed from them:
 Repairing a clock error then only means removing wrong entries: everything else
 follows. Empty attempts cannot exist.
 
-**This differs from the previously validated schema**, which had an `attempt`
-table with a unique index on the active attempt. It needs explicit approval.
+This replaces the `attempt` table of the initial schema. A goal stores its
+archive date; there is no stored status.
 
 ## Checkpoint and detection
 
-The application stores the instant and date of the last accepted reconciliation.
+The application stores the date of the last accepted reconciliation.
 On launch, resume and before any write:
 
 | Situation | Condition | Behaviour |
@@ -52,7 +53,8 @@ read-only. It re-evaluates on the next resume, after the clock is fixed.
 1. "The clock is wrong now": stay read-only until it is fixed.
 2. "The clock was wrong before": after a preview and confirmation, in one
    transaction, delete the entries dated after today and the missed entries dated
-   today, then move the checkpoint to today.
+   today, bring a later archive date back to today, then move the checkpoint to
+   today.
 
 Both paths have a way out, so the app is never blocked until a future date. A
 short forward jump (under 3 days) is not detected when it happens, but is
@@ -61,7 +63,7 @@ repaired by choice 2 once the clock is corrected.
 ## Testability
 
 The assessment and the repair are pure functions of the checkpoint, the current
-instant, the zone and the entries. The clock and the instant-to-date conversion
+date and the entries. The clock and the instant-to-date conversion
 are injected.
 
 ## Limits of an offline application

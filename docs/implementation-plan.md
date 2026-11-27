@@ -9,7 +9,7 @@ commit message, then waits for validation. Nothing is committed automatically.
 |---|---|---|---|
 | 0 | Foundations: demo removal, `src/` skeleton, strict TypeScript, CI checks, debug/release separation, release signing, license, documentation | local checks and Android builds pass | Done |
 | 1 | Spike: OP-SQLite, React Navigation, time zone support of `Intl` on Hermes | a release build reads and writes on the phone, and converts an instant to a date in a chosen zone | Code ready, release build passes; on-device checks pending |
-| 2 | Domain: local dates, entries, derived attempts and streaks, validation, reconciliation, clock assessment and repair | domain tests pass | |
+| 2 | Domain: local dates, entries, derived attempts and streaks, validation, reconciliation, clock assessment and repair | domain tests pass | Done, awaiting validation |
 | 3 | SQLite migrations and store | constraints, cascading deletion and rollback are tested | |
 | 4 | Use cases with an injected clock | multi-day scenarios are tested end to end | |
 | 5 | Translations (fr, en), goal creation, home screen with quick validation | data survives a restart, offline | |
@@ -18,8 +18,10 @@ commit message, then waits for validation. Nothing is committed automatically.
 | 8 | JSON export and import | round trip, invalid files and rollback are tested | |
 | 9 | Documentation and acceptance of the MVP criteria | `v1.0.0` APK | |
 
-Steps 2 to 4 depend on the validation of
-[decisions/0002-time-handling.md](decisions/0002-time-handling.md).
+Time handling: [decisions/0002-time-handling.md](decisions/0002-time-handling.md).
+
+Goal creation and editing rules (title, start date, locked duration) are written
+with their use cases in step 4.
 
 ## Step 1 verification (on the phone)
 
