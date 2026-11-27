@@ -39,6 +39,7 @@ function validateOn(
 ): DailyEntry[] {
   const reconciled = [...entries, ...reconcile(schedule, entries, today)];
   const result = validateDay(schedule, reconciled, today, today);
+
   return result.kind === 'add' ? [...reconciled, result.entry] : reconciled;
 }
 

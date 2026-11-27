@@ -32,10 +32,12 @@ export function dayState(
   if (entry) {
     return entry.status;
   }
+
   const { completedOn } = deriveProgress(schedule, entries);
   if (!isRequired(schedule, completedOn, date)) {
     return 'notScheduled';
   }
+
   return date > today ? 'upcoming' : 'pending';
 }
 
@@ -61,5 +63,6 @@ export function reconcile(
   ) {
     missed.push({ date, status: 'missed' });
   }
+
   return missed;
 }

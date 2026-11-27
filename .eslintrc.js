@@ -11,7 +11,20 @@ const restrictImports = (...patterns) => ({
 module.exports = {
   root: true,
   extends: '@react-native',
-  rules: restrictImports(moduleInternals),
+  rules: {
+    ...restrictImports(moduleInternals),
+    curly: ['error', 'all'],
+    // Blank line after control blocks and before `return`.
+    'padding-line-between-statements': [
+      'error',
+      {
+        blankLine: 'always',
+        prev: ['if', 'for', 'while', 'do', 'switch', 'try'],
+        next: '*',
+      },
+      { blankLine: 'always', prev: '*', next: 'return' },
+    ],
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],

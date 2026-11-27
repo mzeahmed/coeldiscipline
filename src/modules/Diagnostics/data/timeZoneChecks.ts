@@ -22,6 +22,7 @@ export async function runTimeZoneChecks(): Promise<CheckResult[]> {
         ([instant, zone, expected]) =>
           dateInTimeZone(new Date(instant), zone) !== expected,
       ).map(([instant, zone]) => `${zone} at ${instant}`);
+
       return {
         passed: failures.length === 0,
         detail: failures.join(', ') || `${CASES.length} conversions correct`,
@@ -30,6 +31,7 @@ export async function runTimeZoneChecks(): Promise<CheckResult[]> {
     await check('Unknown time zone rejected', async () => {
       try {
         dateInTimeZone(new Date(), 'Mars/Olympus');
+
         return { passed: false, detail: 'accepted' };
       } catch (error) {
         return { passed: error instanceof RangeError, detail: String(error) };
@@ -37,6 +39,7 @@ export async function runTimeZoneChecks(): Promise<CheckResult[]> {
     }),
     await check('Device time zone', async () => {
       const zone = deviceTimeZone();
+
       return {
         passed: Boolean(zone),
         detail: `${zone}, today ${dateInTimeZone(new Date(), zone)}`,
@@ -44,6 +47,7 @@ export async function runTimeZoneChecks(): Promise<CheckResult[]> {
     }),
     await check('Time zone list', async () => {
       const zones = (Intl as IntlWithZoneList).supportedValuesOf?.('timeZone');
+
       return {
         passed: Boolean(zones?.length),
         detail: zones ? `${zones.length} zones` : 'supportedValuesOf missing',

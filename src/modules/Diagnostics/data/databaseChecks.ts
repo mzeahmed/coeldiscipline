@@ -4,6 +4,7 @@ import { check } from './check';
 
 async function countRows(db: DB): Promise<number> {
   const result = await db.execute('SELECT COUNT(*) AS total FROM spike_run');
+
   return Number(result.rows[0]?.total);
 }
 
@@ -24,6 +25,7 @@ export async function runDatabaseChecks(): Promise<CheckResult[]> {
         await db.execute('INSERT INTO spike_run DEFAULT VALUES');
         const total = await countRows(db);
         const version = await db.execute('SELECT sqlite_version() AS version');
+
         return {
           passed: total > 0,
           detail: `${total} run(s) stored, SQLite ${version.rows[0]?.version}`,
@@ -43,6 +45,7 @@ export async function runDatabaseChecks(): Promise<CheckResult[]> {
             }
           });
         const after = await countRows(db);
+
         return { passed: before === after, detail: `${before} -> ${after}` };
       }),
       await check('SQLite foreign keys', async () => {
@@ -52,6 +55,7 @@ export async function runDatabaseChecks(): Promise<CheckResult[]> {
             () => false,
             () => true,
           );
+
         return {
           passed: rejected,
           detail: rejected ? 'orphan row rejected' : 'orphan row accepted',

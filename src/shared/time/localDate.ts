@@ -21,6 +21,7 @@ export function parseLocalDate(value: string): LocalDate {
   if (Number.isNaN(day) || fromEpochDay(day) !== value) {
     throw new RangeError(`Invalid date: ${value}`);
   }
+
   return value as LocalDate;
 }
 
